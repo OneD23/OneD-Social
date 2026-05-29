@@ -1,0 +1,151 @@
+openapi: 3.0.3
+info:
+  title: OneD Social API
+  version: 0.2.0
+  description: API REST para red social local/comercial OneD Social.
+servers:
+  - url: http://localhost:4000/api/v1
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200': { description: OK }
+  /auth/register:
+    post:
+      summary: Registrar usuario
+      responses:
+        '201': { description: Usuario creado }
+  /auth/login:
+    post:
+      summary: Iniciar sesión
+      responses:
+        '200': { description: Tokens emitidos }
+  /auth/refresh:
+    post:
+      summary: Rotar refresh token
+      responses:
+        '200': { description: Tokens emitidos }
+  /media/upload:
+    post:
+      summary: Subir imagen o video a Cloudinary
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201': { description: Media creada }
+  /chat/conversation:
+    post:
+      summary: Crear conversación privada o grupal
+      responses:
+        '201': { description: Conversación creada }
+  /chat/conversations:
+    get:
+      summary: Listar conversaciones del usuario
+      responses:
+        '200': { description: Lista paginada }
+  /chat/messages/{conversationId}:
+    get:
+      summary: Listar mensajes
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Lista paginada }
+  /chat/send:
+    post:
+      summary: Enviar mensaje
+      responses:
+        '201': { description: Mensaje enviado }
+  /posts/{id}/share:
+    post:
+      summary: Compartir publicación
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '201': { description: Share creado }
+  /stories:
+    get:
+      summary: Listar stories activas
+      responses:
+        '200': { description: Lista paginada }
+    post:
+      summary: Crear story por 24 horas
+      responses:
+        '201': { description: Story creada }
+  /search:
+    get:
+      summary: Búsqueda global
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+      responses:
+        '200': { description: Resultados agrupados }
+  /reports:
+    post:
+      summary: Reportar contenido
+      responses:
+        '201': { description: Reporte creado }
+  /admin/reports:
+    get:
+      summary: Revisar reportes
+      responses:
+        '200': { description: Reportes paginados }
+  /marketplace:
+    get:
+      summary: Listar productos
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear producto
+      responses:
+        '201': { description: Creado }
+  /jobs:
+    get:
+      summary: Listar empleos
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Publicar empleo
+      responses:
+        '201': { description: Creado }
+  /events:
+    get:
+      summary: Listar eventos
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear evento
+      responses:
+        '201': { description: Creado }
+  /communities:
+    get:
+      summary: Listar comunidades
+      responses:
+        '200': { description: OK }

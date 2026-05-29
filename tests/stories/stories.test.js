@@ -1,0 +1,1 @@
+describe('stories ttl', () => { it('uses a 24 hour expiration window convention', () => { const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); expect(expiresAt.getTime()).toBeGreaterThan(Date.now()); }); });

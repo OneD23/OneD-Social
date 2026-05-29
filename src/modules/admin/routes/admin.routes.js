@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { requireRole } from '../../../middleware/rbac.js';
+import * as controller from '../controllers/admin.controller.js';
+const router=Router();
+router.use(authenticate, requireRole('moderator'));
+router.get('/reports', controller.listReports);
+router.delete('/posts/:postId', controller.deletePost);
+router.post('/users/:userId/ban', controller.banUser);
+router.post('/users/:userId/verify', requireRole('admin'), controller.verifyUser);
+router.post('/businesses/:businessId/suspend', controller.suspendBusiness);
+router.post('/businesses/:businessId/verify', requireRole('admin'), controller.verifyBusiness);
+export default router;

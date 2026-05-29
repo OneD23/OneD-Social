@@ -1,0 +1,4 @@
+import mongoose from 'mongoose';
+const schema=new mongoose.Schema({ seller:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,index:true}, business:{type:mongoose.Schema.Types.ObjectId,ref:'Business',default:null,index:true}, title:{type:String,required:true,trim:true,maxlength:140}, description:{type:String,default:'',maxlength:2000}, category:{type:mongoose.Schema.Types.ObjectId,ref:'MarketplaceCategory',default:null,index:true}, photos:[{type:String}], price:{amount:{type:Number,required:true,min:0},currency:{type:String,default:'DOP'}}, location:{type:String,required:true,index:true}, contact:{phone:{type:String,default:''},whatsapp:{type:String,default:''}}, status:{type:String,enum:['active','sold','paused'],default:'active',index:true}, deletedAt:{type:Date,default:null,index:true}},{timestamps:true});
+schema.index({title:'text',description:'text',location:'text'});
+export const MarketplaceItem=mongoose.model('MarketplaceItem',schema);

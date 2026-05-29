@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/job.controller.js';
+import { jobSchema } from '../validators/job.validator.js';
+const router=Router();
+router.get('/', controller.list);
+router.post('/', authenticate, validate(jobSchema), controller.create);
+router.get('/:id', controller.get);
+router.patch('/:id', authenticate, validate(jobSchema), controller.update);
+router.delete('/:id', authenticate, controller.remove);
+router.post('/:id/apply', authenticate, async (req,res,next)=>{ try { const { applyToJob } = await import('../services/jobApplication.service.js'); res.status(201).json(await applyToJob(req.user._id, req.params.id, req.body)); } catch(e){ next(e); } });
+router.post('/:id/save', authenticate, async (req,res,next)=>{ try { const { saveJob } = await import('../services/jobApplication.service.js'); res.json(await saveJob(req.user._id, req.params.id)); } catch(e){ next(e); } });
+export default router;

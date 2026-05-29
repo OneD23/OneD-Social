@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/chat.controller.js';
+import { conversationSchema, sendMessageSchema } from '../validators/chat.validator.js';
+const router = Router();
+router.use(authenticate);
+router.post('/conversation', validate(conversationSchema), controller.createConversation);
+router.get('/conversations', controller.listConversations);
+router.get('/messages/:conversationId', controller.listMessages);
+router.post('/send', validate(sendMessageSchema), controller.sendMessage);
+router.patch('/conversations/:conversationId/read', controller.markRead);
+export default router;

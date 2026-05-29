@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/community.controller.js';
+import { communitySchema } from '../validators/community.validator.js';
+const router=Router();
+router.get('/', controller.list);
+router.post('/', authenticate, validate(communitySchema), controller.create);
+router.get('/:id', controller.get);
+router.patch('/:id', authenticate, validate(communitySchema), controller.update);
+router.delete('/:id', authenticate, controller.remove);
+export default router;

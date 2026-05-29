@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/story.controller.js';
+import { createStorySchema } from '../validators/story.validator.js';
+const router = Router();
+router.post('/', authenticate, validate(createStorySchema), controller.createStory);
+router.get('/', controller.listStories);
+router.get('/:userId', controller.listUserStories);
+export default router;

@@ -1,0 +1,12 @@
+import { ApiError } from '../../../utils/ApiError.js';
+import { Business } from '../../businesses/models/business.model.js';
+import { Post } from '../../posts/models/post.model.js';
+import { User } from '../../users/models/user.model.js';
+import { listReports } from '../../reports/services/report.service.js';
+import { writeAuditLog } from '../../audit/services/audit.service.js';
+export const banUser = async (admin, userId, req) => { const user=await User.findByIdAndUpdate(userId,{status:'banned'},{new:true}); if(!user) throw new ApiError(404,'User not found'); await writeAuditLog({actor:admin, action:'admin.user.ban', entityType:'User', entityId:userId, req}); return user; };
+export const verifyUser = async (admin, userId, req) => { const user=await User.findByIdAndUpdate(userId,{verified:true,verifiedAt:new Date(),verifiedBy:admin},{new:true}); if(!user) throw new ApiError(404,'User not found'); await writeAuditLog({actor:admin, action:'admin.user.verify', entityType:'User', entityId:userId, req}); return user; };
+export const suspendBusiness = async (admin, businessId, req) => { const business=await Business.findByIdAndUpdate(businessId,{status:'suspended'},{new:true}); if(!business) throw new ApiError(404,'Business not found'); await writeAuditLog({actor:admin, action:'admin.business.suspend', entityType:'Business', entityId:businessId, req}); return business; };
+export const verifyBusiness = async (admin, businessId, req) => { const business=await Business.findByIdAndUpdate(businessId,{verified:true,verifiedAt:new Date(),verifiedBy:admin},{new:true}); if(!business) throw new ApiError(404,'Business not found'); await writeAuditLog({actor:admin, action:'admin.business.verify', entityType:'Business', entityId:businessId, req}); return business; };
+export const deletePost = async (admin, postId, req) => { const post=await Post.findByIdAndUpdate(postId,{deletedAt:new Date()},{new:true}); if(!post) throw new ApiError(404,'Post not found'); await writeAuditLog({actor:admin, action:'admin.post.delete', entityType:'Post', entityId:postId, req}); return {deleted:true}; };
+export { listReports };

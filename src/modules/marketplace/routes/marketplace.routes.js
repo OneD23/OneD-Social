@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/marketplace.controller.js';
+import { marketplaceSchema } from '../validators/marketplace.validator.js';
+const router=Router();
+router.get('/', controller.list);
+router.post('/', authenticate, validate(marketplaceSchema), controller.create);
+router.get('/:id', controller.get);
+router.patch('/:id', authenticate, validate(marketplaceSchema), controller.update);
+router.delete('/:id', authenticate, controller.remove);
+export default router;

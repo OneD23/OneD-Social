@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { authenticate } from '../../../middleware/auth.js';
+import { validate } from '../../../middleware/validate.js';
+import * as controller from '../controllers/event.controller.js';
+import { eventSchema } from '../validators/event.validator.js';
+const router=Router();
+router.get('/', controller.list);
+router.post('/', authenticate, validate(eventSchema), controller.create);
+router.get('/:id', controller.get);
+router.patch('/:id', authenticate, validate(eventSchema), controller.update);
+router.delete('/:id', authenticate, controller.remove);
+router.post('/:id/attend', authenticate, async (req,res,next)=>{ try { const { attendEvent } = await import('../services/eventAttendance.service.js'); res.json(await attendEvent(req.user._id, req.params.id, req.body.status)); } catch(e){ next(e); } });
+export default router;
